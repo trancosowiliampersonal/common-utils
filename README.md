@@ -1,8 +1,8 @@
 Utils
 =====================
 
-* [ObjectConverter](#ObjectConverter)
-* [Credits](#Credits)
+* [ObjectConverter](#objectConverter)
+* [Credits](#credits)
 
 
 ## ObjectConverter
