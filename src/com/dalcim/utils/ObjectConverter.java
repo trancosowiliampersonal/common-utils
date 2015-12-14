@@ -2,14 +2,24 @@ package com.dalcim.utils;
 
 import java.lang.reflect.Field;
 
+import com.dalcim.annotations.BindClass;
 import com.dalcim.annotations.BindProperty;
 
 public class ObjectConverter {
 	
-	public static <T> T setFields(Object de, Class<T> para) throws Exception {
+	@SuppressWarnings("unchecked")
+	public static <T> T setFields(Object de) throws Exception {
+		
+		Class<?> a = ((BindClass)de.getClass().getAnnotation(BindClass.class)).value();
+		Object objRetorno = a.newInstance();
+		setFields(de, objRetorno);
+		
+		return (T)objRetorno;
+	}
+	
+	public static void setFields(Object de, Object objRetorno) throws Exception {
 		
 		Class<?> fieldsAnnotations = de.getClass();
-		T objRetorno = para.newInstance();
 		
 		BindProperty bp;
 		String nameProperty = null;
@@ -28,7 +38,7 @@ public class ObjectConverter {
 
 					if (nameProperty.contains(".")) {
 						
-						classAux = para;
+						classAux = objRetorno.getClass();
 						
 						String[] names = nameProperty.split("\\.");
 						
@@ -52,7 +62,7 @@ public class ObjectConverter {
 						ft = fields[fields.length - 1];
 						
 					} else{
-						ft = para.getDeclaredField( nameProperty );
+						ft = objRetorno.getClass().getDeclaredField( nameProperty );
 						aux = objRetorno;
 					}
 					
@@ -70,7 +80,6 @@ public class ObjectConverter {
 			e.printStackTrace();
 		}
 		
-		return objRetorno;
 	}
 	
 }
